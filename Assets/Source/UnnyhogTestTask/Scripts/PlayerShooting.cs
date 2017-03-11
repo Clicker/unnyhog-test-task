@@ -11,6 +11,7 @@ namespace UnnyhogTestTask.Scripts
         public Transform GunPoint;
         public GameObject ProjectilePrefab;
         public float TimeBetweenShots = 1f;
+        public AudioSource AudioSource;
 
         private float _timer;
 
@@ -37,6 +38,8 @@ namespace UnnyhogTestTask.Scripts
         /// </summary>
         private void CreateProjectile()
         {
+            AudioSource.Play();
+
             Instantiate(ProjectilePrefab, GunPoint.position, transform.rotation);
         }
     }

@@ -8,16 +8,29 @@ namespace UnnyhogTestTask.Scripts
         public float Speed;
         public float Damage;
         public float Range;
+
+        public GameObject Geometry;
+        public AudioSource AudioSource;
+        public AudioClip HitAudioClip;
         
         private Vector3 _startPosition;
+        private Collider _collider;
+        private bool _isActive;
 
         private void Start()
         {
             _startPosition = transform.position;
+            _collider = GetComponent<Collider>();
+            _isActive = true;
         }
 
         private void FixedUpdate()
         {
+            if (!_isActive)
+            {
+                return;
+            }
+
             if (Vector3.Distance(_startPosition, transform.position) > Range)
             {
                 Destroy();
@@ -42,7 +55,16 @@ namespace UnnyhogTestTask.Scripts
 
         private void Destroy()
         {
-            Destroy(gameObject);
+            Geometry.SetActive(false);
+            _collider.enabled = false;
+            _isActive = false;
+
+            AudioSource.Stop();
+            AudioSource.clip = HitAudioClip;
+            AudioSource.loop = false;
+            AudioSource.Play();
+            
+            Destroy(gameObject, HitAudioClip.length);
         }
     }
 }
